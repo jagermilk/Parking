@@ -25,6 +25,9 @@ export default {
       required: true
     }
   },
+  created(){
+    this.a()
+  },
   computed: {
     variables() {
       return variables;
@@ -38,7 +41,13 @@ export default {
       title: process.env.VUE_APP_TITLE,
       logo: logoImg
     }
+  },
+ methods:{
+  a(){
+    console.log('process.env.VUE_APP_TITLE',process.env.VUE_APP_TITLE);
   }
+ }
+  
 }
 </script>
 
@@ -57,7 +66,7 @@ export default {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: #2b2f3a;
+  background: #0076f6 !important;
   text-align: center;
   overflow: hidden;
 
@@ -75,7 +84,7 @@ export default {
     & .sidebar-title {
       display: inline-block;
       margin: 0;
-      color: #fff;
+      color: #ffff !important;
       font-weight: 600;
       line-height: 50px;
       font-size: 14px;

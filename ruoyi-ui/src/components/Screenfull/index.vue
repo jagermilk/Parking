@@ -1,3 +1,4 @@
+<!-- 全屏展示 -->
 <template>
   <div>
     <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="click" />
@@ -11,7 +12,7 @@ export default {
   name: 'Screenfull',
   data() {
     return {
-      isFullscreen: false
+      isFullscreen: false,
     }
   },
   mounted() {
@@ -26,7 +27,8 @@ export default {
         this.$message({ message: '你的浏览器不支持全屏', type: 'warning' })
         return false
       }
-      screenfull.toggle()
+      console.log('dom3',this.$store.state.transmission.appmine);
+      screenfull.request(this.$store.state.transmission.appmine)
     },
     change() {
       this.isFullscreen = screenfull.isFullscreen

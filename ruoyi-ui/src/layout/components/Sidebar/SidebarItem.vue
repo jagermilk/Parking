@@ -64,6 +64,7 @@ export default {
           return false
         } else {
           // Temp set(will be used if only has one showing child)
+          // console.log("iconitem",item);
           this.onlyOneChild = item
           return true
         }
