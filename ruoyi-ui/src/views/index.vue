@@ -3,13 +3,13 @@
     <el-row :gutter="10">
       <el-col :span="12">
         <shadowIcon :idname="'one'">
-          <div class="grid-content bg-purple">
-            <el-card class="one" shadow="hover">1</el-card>
-            <el-card class="two" shadow="hover">2</el-card>
-            <el-card class="three" shadow="hover">3</el-card>
-            <el-card class="four" shadow="hover">4</el-card>
-            <el-card class="five" shadow="hover">5</el-card>
-            <el-card class="six" shadow="hover">6</el-card>
+          <div class="grid-content bg-purple one  ">
+            <el-card class="tag" shadow="hover">1</el-card>
+            <el-card class="tag" shadow="hover">2</el-card>
+            <el-card class="tag" shadow="hover">3</el-card>
+            <el-card class="tag" shadow="hover">4</el-card>
+            <el-card class="tag" shadow="hover">5</el-card>
+            <el-card class="tag" shadow="hover">6</el-card>
           </div>
         </shadowIcon>
       </el-col>
@@ -342,6 +342,7 @@ export default {
 .bg-purple {
   height: 100%;
   background: #d3dce6;
+ 
 }
 .bg-purple-light {
   background: #e5e9f2;
@@ -353,50 +354,21 @@ export default {
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
+  
 }
-
-.one {
-  float: left;
-  width: 32%;
-  height: 48%;
-  margin-right: 13px;
+.one{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 创建3列的网格 */
+      grid-gap: 10px; /* 为网格中的元素添加间距 */
+      width: 100%; /* 根据需要设置宽度 */
+      box-sizing: border-box; /* 包含边框计算在内 */
 }
-.two {
-  float: left;
-  width: 32%;
-  height: 48%;
-  margin-right: 13px;
-}
-.three {
-  float: left;
-  width: 32%;
-  height: 48%;
-}
-.five {
-  float: left;
-  width: 32%;
-  height: 48%;
-}
-.four {
-  float: left;
-  width: 32%;
-  height: 48%;
-  margin-top: 10px;
-  margin-right: 13px;
-}
-.five {
-  float: left;
-  width: 32%;
-  height: 48%;
-  margin-right: 13px;
-  margin-top: 10px;
-}
-.six {
-  float: left;
-  width: 32%;
-  height: 48%;
-  margin-top: 10px;
-}
+.tag{
+      padding: 5px 10px; /* 可选，为标签添加内边距 */
+      border: 1px solid #ccc; /* 可选，为标签添加边框 */
+      border-radius: 5px; /* 可选，为标签添加圆角 */
+      text-align: center;
+        }
 .el-card {
   background-color: pink; /* 设置背景色，便于观察 */
   //margin-right: 8px;
