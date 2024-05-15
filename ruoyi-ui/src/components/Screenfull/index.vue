@@ -10,9 +10,12 @@ import screenfull from 'screenfull'
 
 export default {
   name: 'Screenfull',
-  data() {
+  props:['isCard'],
+   data() {
     return {
       isFullscreen: false,
+      sonIscard:this.isCard,
+      shenme:''
     }
   },
   mounted() {
@@ -27,8 +30,20 @@ export default {
         this.$message({ message: '你的浏览器不支持全屏', type: 'warning' })
         return false
       }
-      console.log('dom3',this.$store.state.transmission.appmine);
-      screenfull.request(this.$store.state.transmission.appmine)
+      // this.$emit('parentEvent',this.shenme)
+      this.$emit('parentEvent')
+      //判断打开的是不是为首页外的卡片
+      if(this.sonIscard){
+        console.log('ka',this.$store.state.transmission.SmallCard);
+        screenfull.request(this.$store.state.transmission.SmallCard)
+        // 监听是否关闭全屏
+        document.addEventListener("fullscreenchange", () => {
+        });
+      }else{
+        screenfull.request(this.$store.state.transmission.appmine)
+      }
+  
+     
     },
     change() {
       this.isFullscreen = screenfull.isFullscreen
@@ -39,6 +54,7 @@ export default {
       }
     },
     destroy() {
+      console.log('444');
       if (screenfull.isEnabled) {
         screenfull.off('change', this.change)
       }
