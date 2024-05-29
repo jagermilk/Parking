@@ -1,51 +1,80 @@
 <template>
   <div class="index">
-    <el-row :gutter="10">
+    <!-- 标题 -->
+    <div class="carTitler" v-if="Titler">项目停车概况</div>
+    <el-row :gutter="12" class="bg">
+      <!-- 板块一 -->
       <el-col :span="12">
-        <shadowIcon :idname="'one'">
           <div class="grid-content bg-purple one  ">
-            <el-card class="tag" shadow="hover">1</el-card>
-            <el-card class="tag" shadow="hover">2</el-card>
-            <el-card class="tag" shadow="hover">3</el-card>
-            <el-card class="tag" shadow="hover">4</el-card>
-            <el-card class="tag" shadow="hover">5</el-card>
-            <el-card class="tag" shadow="hover">6</el-card>
+            <shadowIcon :idname="'one'">
+              <div class="tag" shadow="hover" id="one">
+                <div class="numName" >在场车辆</div>
+                <div class="num">9999</div>
+                <div class="yesterdayData">昨日 <span>888</span></div>
+              </div>
+            </shadowIcon>
+            <shadowIcon :idname="'two'">
+              <div class="tag" shadow="hover" id="two">     
+                <div class="numName">在场车辆</div>
+                <div class="num">9999</div>
+                <div class="yesterdayData">昨日 <span>888</span></div>
+              </div>
+            </shadowIcon>
+            <shadowIcon :idname="'three'">
+              <div class="tag" shadow="hover" id="three" >     
+                <div class="numName">在场车辆</div>
+                <div class="num">9999</div>
+                <div class="yesterdayData">昨日 <span>888</span></div>
+              </div>
+            </shadowIcon>
+            <shadowIcon :idname="'four'">
+              <div class="tag" shadow="hover" id="four">     
+                <div class="numName">在场车辆</div>
+                <div class="num">9999</div>
+                <div class="yesterdayData">昨日 <span>888</span></div>
+              </div>
+            </shadowIcon>
+            <shadowIcon :idname="'five'" >
+              <div class="tag" shadow="hover" id="five">     
+                <div class="numName">在场车辆</div>
+                <div class="num">9999</div>
+                <div class="yesterdayData">昨日 <span>888</span></div>
+              </div>
+            </shadowIcon>
+            <shadowIcon :idname="'six'">
+              <div class="tag" shadow="hover" id="six">     
+                <div class="numName">在场车辆</div>
+                <div class="num">9999</div>
+                <div class="yesterdayData">昨日 <span>888</span></div>
+              </div>
+            </shadowIcon>
           </div>
-        </shadowIcon>
+        
       </el-col>
       <el-col :span="6">
         <div class="grid-content bg-purple">
-          <el-card class="inMangement">
-            <div slot="header" class="clearfix">
-            <span>管理入口</span> 
-            </div> 
-            <el-row :gutter="10">
-              <el-col :span="12" v-for="(item, index) in items" :key="index">
-                <div class="icon-text-container">
-                    <i :class="'el-icon-' + item.icon"></i> 
-                   <span>{{ item.text }}</span>
-                </div>
-              </el-col>
-            </el-row>
-          </el-card>
+            <el-card class="inMangement" >
+              <div slot="header" class="clearfix">
+              <span >管理入口</span> 
+              </div> 
+              <el-row :gutter="10">
+                <el-col :span="12" v-for="(item, index) in items" :key="index">
+                  <div class="icon-text-container">
+                      <i :class="'el-icon-' + item.icon"></i> 
+                    <span>{{ item.text }}</span>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-card>
         </div>
       </el-col>
+      <!-- 车道列表 -->
       <el-col :span="6">
         <div class="grid-content bg-purple">
-          <el-card class="carList">
-            <div slot="header" class="clearfix">
+          <shadowIcon :idname="'seven'" >
+          <el-card class="carList" >
+            <div slot="header" class="clearfix" >
                <span>车道列表</span> 
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="车道列表"
-                placement="top-start"
-              >
-                <i
-                  style="float: right; padding: 3px 0"
-                  class="el-icon-warning"
-                ></i>
-              </el-tooltip>
             </div>
             <el-table
               :data="tableData"
@@ -53,6 +82,7 @@
               style="width: 100%"
               size="mini"
               fit
+              id="seven"
             >
               <el-table-column prop="date" label="名称"> </el-table-column>
               <el-table-column prop="name" label="网络"> </el-table-column>
@@ -70,72 +100,75 @@
               </el-table-column>
             </el-table>
           </el-card>
+        </shadowIcon>
         </div>
       </el-col>
     </el-row>
+    <!-- 饼状图 -->
     <el-row :gutter="10">
       <el-col :span="6">
-        <shadowIcon :idname="'three'">
+        <shadowIcon :idname="'eight'" >
+          <div class="grid-content bg-purple" style="background-color: #fff;" id="eight">
+            <div class="numName">收费汇总</div>
+            <div
+              class="onee"
+              style="height: 90%; "
+            ></div>         
+          </div>
+        </shadowIcon>
+      </el-col>
+      <el-col :span="6">
+        <shadowIcon :idname="'nine'">
           <div class="grid-content bg-purple">
             <div
               class="onee"
-              style="height: 90%; background-color: #d3dce6"
-              id="three"
+              style="height: 100%;"
+              id="nine"
             ></div>
           </div>
         </shadowIcon>
       </el-col>
       <el-col :span="6">
-        <shadowIcon :idname="'four'">
+        <shadowIcon :idname="'ten'">
           <div class="grid-content bg-purple">
             <div
               class="onee"
-              style="height: 90%; background-color: #04395e"
-              id="four"
+              style="height: 100%;"
+              id="ten"
             ></div>
           </div>
         </shadowIcon>
       </el-col>
       <el-col :span="6">
-        <shadowIcon :idname="'five'">
+        <shadowIcon :idname="'eleven'">
           <div class="grid-content bg-purple">
             <div
               class="onee"
-              style="height: 90%; background-color: #04395e"
-              id="five"
-            ></div>
-          </div>
-        </shadowIcon>
-      </el-col>
-      <el-col :span="6">
-        <shadowIcon :idname="'six'">
-          <div class="grid-content bg-purple">
-            <div
-              class="onee"
-              style="height: 90%; background-color: #04395e"
-              id="six"
+              style="height: 100%;"
+              id="eleven"
             ></div>
           </div>
         </shadowIcon>
       </el-col>
     </el-row>
+    <!-- 折线图 -->
     <el-row :gutter="10">
       <el-col :span="12">
-        <shadowIcon :idname="'seven'">
+        <shadowIcon :idname="'twelve'">
           <div
             class="twoo"
-            style="height: 100%; background-color: #04395e"
-            id="seven"
+            style="height: 100%; background-color: #fff"
+            id="twelve"
           ></div>
           <div class="grid-content bg-purple"></div>
         </shadowIcon>
       </el-col>
       <el-col :span="12">
-        <shadowIcon :idname="'eight'">
+        <shadowIcon :idname="'thirteen'">
           <div
             class="twoo"
-            style="height: 100%; background-color: #04395e"
-            id="eight"
+            style="height: 100%; background-color: #fff"
+            id="thirteen"
           ></div>
           <div class="grid-content bg-purple"></div>
         </shadowIcon>
@@ -148,6 +181,7 @@
 import * as echarts from "echarts";
 import Screenfull from "@/components/Screenfull";
 import ShadowIcon from "@/components/shadowIcon";
+import { mapState } from 'vuex';
 export default {
   components: {
     Screenfull,
@@ -196,13 +230,21 @@ export default {
         { icon: 'delete', text: '两字' },
         { icon: 'share',  text: '其他四字' }
         // 添加更多项...
-      ]
+      ],
+      chartInstance: null,
     };
   },
   mounted() {
     this.pieChart(), this.lineChart();
+    this.resizeChart();
+    window.addEventListener('resize', this.resizeChart);
   },
   methods: {
+    resizeChart() {
+         if (this.chartInstance) {
+           this.chartInstance.resize();
+         }
+       },
     showShadow() {
       this.isHover = true;
     },
@@ -218,6 +260,7 @@ export default {
         var myChart = echarts.init(chartDom);
         var option;
         window.addEventListener("resize", function () {
+          // console.log("变meimei",);
           myChart.resize();
         });
         option = {
@@ -299,12 +342,36 @@ export default {
       this.$store.commit("transmission/set_SmallCard", a);
     },
   },
+  computed: {
+    Titler:function(){
+      return this.$store.state.transmission.carTitler;
+    },
+  },
+  watch: {
+    Titler(newVal, oldVal) {
+      // 这里监听carTitler的变化
+      console.log('carTitler changed from', oldVal, 'to', newVal);
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
+.carTitler{
+  width: 100%;
+  height: 60px;
+
+  font-size: 22px;
+  color: #fff;
+  line-height: 60px;
+  text-align: center;
+  background-image: url(../assets/images/title_bg.jpg);
+
+}
 .index {
   height: 100%;
+  background-color: #f5f6fa;
+  font-family: GB;
 }
 .el-row {
   height: 32%;
@@ -312,10 +379,13 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
+ 
 }
+
 .el-col {
   height: 100%;
-  border-radius: 4px;
+  // border-radius: 4px;
+  background-color: #f5f6fa;
 }
 //鼠标移入效果
 .container {
@@ -323,32 +393,25 @@ export default {
   height: 100%;
   transition: box-shadow 0.3s ease;
 }
-
-// .content {
-//   /* 你的内容样式 */
-//   height: 100%;
-//   background-color: #d3dce6;
-//  }
-
 .container:hover {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.bg-purple-dark {
-  background: #99a9bf;
-}
+// .bg-purple-dark {
+//   background: #fff;
+// }
 .bg-purple {
   height: 100%;
-  background: #d3dce6;
+  background: #fff;
  
 }
 .bg-purple-light {
   background: #e5e9f2;
 }
 .grid-content {
-  border-radius: 4px;
+  // border-radius: 4px;
   min-height: 36px;
 }
 .row-bg {
@@ -357,22 +420,46 @@ export default {
   
 }
 .one{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 创建3列的网格 */
-      grid-gap: 10px; /* 为网格中的元素添加间距 */
-      width: 100%; /* 根据需要设置宽度 */
-      box-sizing: border-box; /* 包含边框计算在内 */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 创建3列的网格 */
+  grid-gap: 8px; /* 为网格中的元素添加间距 */
+  width: 100%; /* 根据需要设置宽度 */
+  background-color:#f5f6f9 ;
 }
 .tag{
-      padding: 5px 10px; /* 可选，为标签添加内边距 */
-      border: 1px solid #ccc; /* 可选，为标签添加边框 */
-      border-radius: 5px; /* 可选，为标签添加圆角 */
-      text-align: center;
-        }
+  background-color: #fff;
+  height: 100% !important; 
+  padding: 13px 15px 15px 15px;
+  // display: flex;ww
+  // justify-content: center; /* 水平居中 */
+  // align-items: center; /* 垂直居中 */
+  // flex-direction: column; /* 文本垂直排列 */
+  // flex-wrap: nowrap;
+  // gap: 10%; /* 在子元素间添加10px的间距 */
+  display: flex;
+  flex-direction: column; /* 设置为垂直布局 */
+  justify-content: space-around; /* 在主轴（这里是垂直方向）上均匀分配空间 */
+  // align-items: center; /* 子元素在交叉轴（这里是水平方向）居中 */
+
+  .numName{
+    font-size: 15px;  
+    font-family: GB;
+    color: #62676b;
+    
+  }
+  .num{
+    font-size: 26px;
+    color: #3d9bff;
+    text-align: center;
+  }  
+  .yesterdayData{
+    font-size: 12px; 
+    color: #94999d;
+  }
+  }
+  
 .el-card {
-  background-color: pink; /* 设置背景色，便于观察 */
-  //margin-right: 8px;
-  //margin-bottom: 10px; /* 设置下边距，实现均匀分布 */
+  background-color: #fff; /* 设置背景色，便于观察 */
 }
 .icon-text-container {
   display: flex;

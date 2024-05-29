@@ -34,6 +34,7 @@
      let a=document.getElementById(this.idname)
      console.log("传输",a);
      this.$store.commit('transmission/set_SmallCard',a)
+     this.$store.commit('transmission/set_fontSize',this.fontSize2)
     }
     }
   };
@@ -49,7 +50,7 @@
   .content {
     /* 你的内容样式 */
     height: 100%;
-    background-color: #d3dce6;
+    background-color: #fff;
    }
    
   .container:hover {

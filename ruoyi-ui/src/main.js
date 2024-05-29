@@ -7,6 +7,7 @@ import './assets/styles/element-variables.scss'
 
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/ruoyi.scss' // ruoyi css
+import '@/assets/styles/fonts.scss'
 import App from './App'
 import store from './store'
 import router from './router'
@@ -38,6 +39,8 @@ import VueMeta from 'vue-meta'
 // 字典数据组件
 import DictData from '@/components/DictData'
 
+
+
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey
@@ -48,6 +51,7 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
+
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)
