@@ -4,10 +4,10 @@
     <sidebar v-if="!sidebar.hide" class="sidebar-container"/>
     <div :class="{hasTagsView:needTagsView,sidebarHide:sidebar.hide}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
-        <navbar/>
-        <tags-view v-if="needTagsView"/>
+        <navbar :a='a'/>
+        <!-- <tags-view v-if="needTagsView"/> -->
       </div>
-      <app-main/>
+      <app-main id='appmain'/>
       <right-panel>
         <settings/>
       </right-panel>
@@ -33,6 +33,14 @@ export default {
     TagsView
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+      a: ''
+    }
+  },
+  mounted(){
+    this.qunpin()
+  },
   computed: {
     ...mapState({
       theme: state => state.settings.theme,
@@ -57,6 +65,12 @@ export default {
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    },
+    qunpin(){
+      this.a=document.getElementById('appmain')
+     console.log('dom1',this.a);
+     this.$store.commit('transmission/set_appmine',this.a)
+     console.log('dom4',this.$store.state.transmission.appmine);
     }
   }
 }
@@ -77,7 +91,9 @@ export default {
       top: 0;
     }
   }
-
+  #appmain{
+    background-color: #fff;
+  }
   .drawer-bg {
     background: #000;
     opacity: 0.3;
@@ -93,7 +109,7 @@ export default {
     top: 0;
     right: 0;
     z-index: 9;
-    width: calc(100% - #{$base-sidebar-width});
+    width: calc(100% - 240px);
     transition: width 0.28s;
   }
 

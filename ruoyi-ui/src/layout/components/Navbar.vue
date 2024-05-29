@@ -16,7 +16,7 @@
         <el-tooltip content="文档地址" effect="dark" placement="bottom">
           <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
         </el-tooltip>
-
+        <!-- 全屏 -->
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
@@ -93,6 +93,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
+      console.log('sidebar',this.sidebar);
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
@@ -115,11 +116,12 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #fff;
+  background: #0076f6;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
     line-height: 46px;
+    color: #fff;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -159,7 +161,7 @@ export default {
       padding: 0 8px;
       height: 100%;
       font-size: 18px;
-      color: #5a5e66;
+      color: #fff;
       vertical-align: text-bottom;
 
       &.hover-effect {
