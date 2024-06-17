@@ -72,7 +72,7 @@
       <el-col :span="6">
         <div class="grid-content bg-purple">
           <shadowIcon :idname="'seven'" >
-          <el-card class="carList" >
+      
             <div slot="header" class="clearfix" >
                <span>车道列表</span> 
             </div>
@@ -99,7 +99,6 @@
                 </template>
               </el-table-column>
             </el-table>
-          </el-card>
         </shadowIcon>
         </div>
       </el-col>
@@ -108,7 +107,7 @@
     <el-row :gutter="10">
       <el-col :span="6">
         <shadowIcon :idname="'eight'" >
-          <div class="grid-content bg-purple" style="background-color: #fff;" id="eight">
+          <div class="grid-content bg-purple"  id="eight">
             <div class="numName">收费汇总</div>
             <div
               class="onee"
@@ -160,7 +159,7 @@
             style="height: 100%; background-color: #fff"
             id="twelve"
           ></div>
-          <div class="grid-content bg-purple"></div>
+          <!-- <div class="grid-content bg-purple"></div> -->
         </shadowIcon>
       </el-col>
       <el-col :span="12">
@@ -170,7 +169,7 @@
             style="height: 100%; background-color: #fff"
             id="thirteen"
           ></div>
-          <div class="grid-content bg-purple"></div>
+          <!-- <div class="grid-content bg-purple"></div> -->
         </shadowIcon>
       </el-col>
     </el-row>
@@ -370,8 +369,13 @@ export default {
 }
 .index {
   height: 100%;
-  background-color: #f5f6fa;
+  // background-color: #f5f6fa;
   font-family: GB;
+  background-image: url('../assets/images/index-bg.jpeg') ;
+  background-repeat: no-repeat; /* 防止背景图片平铺 */
+  background-size: cover; /* 图片缩放以填满容器 */
+    background-position: center; /* 图片居中 */
+  
 }
 .el-row {
   height: 32%;
@@ -379,13 +383,11 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
- 
 }
-
 .el-col {
   height: 100%;
   // border-radius: 4px;
-  background-color: #f5f6fa;
+  // background-color: #f5f6fa;
 }
 //鼠标移入效果
 .container {
@@ -419,48 +421,40 @@ export default {
   background-color: #f9fafc;
   
 }
+// 第一个数据展示样式
 .one{
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 创建3列的网格 */
   grid-gap: 8px; /* 为网格中的元素添加间距 */
   width: 100%; /* 根据需要设置宽度 */
-  background-color:#f5f6f9 ;
+  // background-color:#f5f6f9 ;
+  background-color: transparent;
+  .tag{
+    background-color: #fff;
+    height: 100% !important; 
+    padding: 13px 15px 15px 15px;
+    display: flex;
+    flex-direction: column; /* 设置为垂直布局 */
+    justify-content: space-around; /* 在主轴（这里是垂直方向）上均匀分配空间 */
+    .numName{
+      font-size: 15px;  
+      font-family: GB;
+      color: #62676b;
+      
+    }
+    .num{
+      font-size: 26px;
+      color: #3d9bff;
+      text-align: center;
+    }  
+    .yesterdayData{
+      font-size: 12px; 
+      color: #94999d;
+    }
+    }
 }
-.tag{
-  background-color: #fff;
-  height: 100% !important; 
-  padding: 13px 15px 15px 15px;
-  // display: flex;ww
-  // justify-content: center; /* 水平居中 */
-  // align-items: center; /* 垂直居中 */
-  // flex-direction: column; /* 文本垂直排列 */
-  // flex-wrap: nowrap;
-  // gap: 10%; /* 在子元素间添加10px的间距 */
-  display: flex;
-  flex-direction: column; /* 设置为垂直布局 */
-  justify-content: space-around; /* 在主轴（这里是垂直方向）上均匀分配空间 */
-  // align-items: center; /* 子元素在交叉轴（这里是水平方向）居中 */
 
-  .numName{
-    font-size: 15px;  
-    font-family: GB;
-    color: #62676b;
-    
-  }
-  .num{
-    font-size: 26px;
-    color: #3d9bff;
-    text-align: center;
-  }  
-  .yesterdayData{
-    font-size: 12px; 
-    color: #94999d;
-  }
-  }
-  
-.el-card {
-  background-color: #fff; /* 设置背景色，便于观察 */
-}
+
 .icon-text-container {
   display: flex;
   align-items: center; /* 对齐图标和文字 */

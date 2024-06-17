@@ -356,6 +356,7 @@ export default {
         const menu = { menuId: 0, menuName: '主类目', children: [] };
         menu.children = this.handleTree(response.data, "menuId");
         this.menuOptions.push(menu);
+        console.log('menuOptions',this.menuOptions);
       });
     },
     // 取消按钮
