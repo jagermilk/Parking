@@ -3,7 +3,7 @@
     <div class="app-container">
         <div class="set">
             <!-- 添加区域 -->
-            <el-button type="success" class="addRegion"  @click="open">添加区域</el-button>
+            <el-button type="success" class="addRegion"  @click="addOpen">添加区域</el-button>
             <!-- 提示框 -->
             <el-tooltip placement="right">
                 <div slot="content">1.区域为子车场,默认车场为大车场,如为大车场内有指定区域单独计费则添加区域
@@ -19,49 +19,50 @@
             </div>
         </div>
         <!-- 列表 -->
-        <div class="list">
-            <el-table
-            :data="tableData"
-            height="250"
-            style="width: 100%"
-           >
-                <el-table-column
-                prop="areaCode"
-                label="区域编号"
-                align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="areaName"
-                label="区域名称"
-                align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="areaParking"
-                label="区域车位"
-                align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="areaRemainPraking"
-                label="区域余位"
-                align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                prop="operate"
-                align="center"
-                label="操作">
-                <template slot-scope="scope">
-                    <el-button @click="viewFun(scope.row)" type="text" size="small">余位校准</el-button>
-                    <el-button @click="editFun(scope.row)" type="text" size="small">编辑</el-button>
-                    <el-button @click="deleteFun(scope.row)" type="text" size="small">删除</el-button>
-                </template>
+        <el-table
+        :data="tableData"
+        row-key="id"
+        :default-expand-all="isExpandAll"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        >
+        <el-table-column
+        prop="areaCode"
+        label="区域编号"
+        align="center"
+        >
+        </el-table-column>
+        <el-table-column
+        prop="areaName"
+        label="区域名称"
+        align="center"
+        >
+        </el-table-column>
+        <el-table-column
+        prop="areaParking"
+        label="区域车位"
+        align="center"
+        >
+        </el-table-column>
+        <el-table-column
+        prop="areaRemainPraking"
+        label="区域余位"
+        align="center"
+        >
+        </el-table-column>
+        <el-table-column
+        prop="operate"
+        align="center"
+        label="操作">
+        <template slot-scope="scope">
+            <el-button @click="viewFun(scope.row)" type="text" size="small">余位校准</el-button>
+            <el-button @click="editFun(scope.row)" type="text" size="small">编辑</el-button>
+            <el-button @click="deleteFun(scope.row)" type="text" size="small">删除</el-button>
+        </template>
 
-                </el-table-column>
+        </el-table-column>
         </el-table>
-        </div>
+
+         
         <!-- 新增表单 -->
         <el-dialog title="添加区域" :visible.sync="dialogFormVisible" width="30%">
             <!-- 表单 -->
@@ -79,29 +80,23 @@
                     <el-input v-model="ruleForm.areaRemainPraking"></el-input>
                 </el-form-item>
                 <el-form-item label="父区域ID" prop="parentId">
-                    <treeselect v-model="ruleForm.parentId" :show-count="true" :options="menuOptions"  :normalizer="normalizer" class="treeSelect" />
+                    <treeselect v-model="ruleForm.parentId" :show-count="true" :options="menuOptions"  :normalizer="normalizerPar" class="treeSelect" />   
                 </el-form-item>
-                <el-form-item label="部门ID" prop="deptId">
-                    <el-select v-model="ruleForm.deptId" filterable placeholder="请选择" style="width: 100%;"> 
-                        <el-option
-                        v-for="item in dept"
-                        :key="item.deptId"
-                        :label="item.deptName"
-                        :value="item.deptId">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="上级部门" prop="deptId">
+                    <treeselect v-model="ruleForm.deptId" :show-count="true" :options="deptOptions"  :normalizer="normalizer" class="treeSelect" />
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addArea">确 定</el-button>
+                <el-button type="primary" @click="addArea" v-if="judge==='add'">确 定</el-button>
+                <el-button type="primary" @click="editArea" v-if="judge==='edit'">确 定</el-button>
             </span>
         </el-dialog>
 
     </div>
 </template>
 <script>
-import { getTableList,addBasicArea,delBasicArea } from '@/api/basicConfiguration/areaManagement';
+import { getTableList,addBasicArea,delBasicArea,getAreaTree,getIdData,editBasicArea } from '@/api/basicConfiguration/areaManagement';
 import { listMenu } from "@/api/system/menu";
 import { listDept } from '@/api/system/dept'
 import { number } from 'echarts';
@@ -111,20 +106,24 @@ export default {
 components: { Treeselect },
 data(){
     return {
+        judge:'',
         serachForm:{
             areaName:''
         },
         areaName:'',
+        // 是否展开，默认全部展开
+      isExpandAll: true,
         tableData:[],
-        dept:[],
+        // dept:[],
+        deptOptions:[],
           // 菜单树选项
         menuOptions: [],
         ruleForm:{
             areaName: '',
             areaParking: '',
             areaRemainPraking: '',
-            parentId: 0,
-            deptId: null,
+            parentId: undefined,
+            deptId: undefined,
             areaCode: '',
         },
         rules: {
@@ -152,11 +151,12 @@ methods:{
         if (this.serachForm) {
             params = Object.assign({}, params, { ...this.serachForm });
         }
-        console.log(this.serachForm);
+        console.log("搜索",this.serachForm);
         console.log('par',params);
-            getTableList(params).then(res => {
-                console.log('re11s',res);
-                this.tableData = res.rows
+        getTableList(params).then(res => {
+                console.log('res',res)
+                this.tableData = this.handleTree(res.data);
+                console.log('this.tableData',this.tableData);
             }).catch(err => {
                 console.error('Error getting table list:', err);
             });
@@ -165,16 +165,18 @@ methods:{
     searchList(){
         this.getList()
     },
+    //新建
+    addOpen(){
+        this.judge = 'add'
+        this.open()
+    },
+    
     //打开对话框
     open(){
+        this.ruleForm = {}; // 清空表单
         this.getTreeselect()
-        console.log('menuOptions',this.menuOptions);
-        console.log('ruleForm',this.ruleForm);
+        this.getParentTreeselect()
         this.dialogFormVisible = true
-        listDept().then(res => {
-            this.dept=res.data
-        // this.deptOptions = this.handleTree(response.data, "deptId");
-      });
     },
     // 添加区域
   async addArea(){
@@ -191,36 +193,78 @@ methods:{
           console.log('res',res);
         })
         this.dialogFormVisible = false
+        this.ruleForm = {}
         this.getList()
       } catch (error) {
         console.error('Error adding area:', error);
       }
     },
-    /** 转换菜单数据结构 */
+    /** 转换上级部门数据结构 */
     normalizer(node) {
       if (node.children && !node.children.length) {
         delete node.children;
       }
       return {
-        id: node.menuId,
-        label: node.menuName,
+        id: node.deptId,
+        label: node.deptName,
         children: node.children,
       };
     },
     //  /** 查询菜单下拉树结构 */
     async getTreeselect() {
-      await listMenu().then((response) => {
+      await listDept().then((response) => {
+        console.log('response',response);
+        this.deptOptions=[]
+        const menu = { deptId: 0, deptName: '主类目', children: [] };
+        menu.children = this.handleTree(response.data, 'deptId');
+        console.log('menu',menu);
+        this.deptOptions.push(menu);
+        console.log('deptOptions',this.deptOptions);
+      });
+    },
+        /** 转换父区域数据结构 */
+    normalizerPar(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.id,
+        label: node.label,
+        children: node.children,
+      };
+    },
+    //  /** 查询父区域下拉树结构 */
+    async getParentTreeselect() {
+      await getAreaTree().then((response) => {
         console.log('response',response);
         this.menuOptions=[]
-        const menu = { menuId: 0, menuName: '主类目', children: [] };
-        menu.children = this.handleTree(response.data, 'menuId');
-        console.log('menu',menu);
-        this.menuOptions.push(menu);
-        console.log('menuOptions11',this.menuOptions);
+       
+        this.menuOptions=response.data
+        console.log('menuOptions',this.menuOptions);
       });
     },
     //编辑
-    editFun(){
+    editFun(data){
+        this.judge='edit'
+        this.open()
+        // 获取当前数据
+        getIdData(data.id).then(res=>{
+            console.log('res',res);
+            this.ruleForm = res.data
+            // console.log(res.parentId);
+            if(res.data.parentId===0){
+                this.ruleForm.parentId=null
+            }
+        })
+    },
+    //编辑保存
+    editArea(){
+        console.log('编辑');
+        editBasicArea(this.ruleForm).then(res=>{
+            console.log('res',res);
+            this.dialogFormVisible = false
+            this.getList()
+        })
     },
     //删除
     deleteFun(data){

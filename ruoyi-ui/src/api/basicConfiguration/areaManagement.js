@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 // 获取列表
 export const getTableList = (data) => {
+  console.log(data);
     return request({
       url: 'basic/basicArea/list',
       method: 'get',
@@ -16,6 +17,14 @@ export const addBasicArea = (data) => {
       data:data
     })
   }
+  // 修改区域
+export const editBasicArea = (data) => {
+  return request({
+    url: 'basic/basicArea',
+    method: 'put',
+    data:data
+  })
+}
   //删除
   export const delBasicArea = (data) => {
     return request({
@@ -24,3 +33,19 @@ export const addBasicArea = (data) => {
       data:data
     })
   }
+//获取区域列表
+export const getAreaTree = (data) => {
+  return request({
+    url: 'basic/basicArea/areaTree',
+    method: 'get',
+    data:data
+  })
+}
+// 获取详细信息
+export const getIdData = (data) => {
+  return request({
+    url: 'basic/basicArea/'+data,
+    method: 'get',
+    data:data
+  })
+}

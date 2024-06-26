@@ -227,7 +227,9 @@ export default {
     getList() {
       this.loading = true;
       listDept(this.queryParams).then(response => {
+        console.log('response',response);
         this.deptList = this.handleTree(response.data, "deptId");
+        console.log('this.deptList',this.deptList);
         this.loading = false;
       });
     },
