@@ -1,9 +1,21 @@
 <template>
     <!-- 车类管理 -->
     <div class="app-container">
-        <div class="set">
+        <div >
             <!-- 添加区域 -->
-            <el-button type="success" class="add"  @click="addOpen">新增</el-button>
+            <!-- <el-button type="success" class="add"  @click="addOpen">新增</el-button> -->
+            <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+                <el-button
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="addOpen"
+                v-hasPermi="['basic:basicCarOwner:add']"
+                >新增</el-button>
+            </el-col>
+            </el-row>
         </div>
         <!-- 列表 -->
         <div class="list">
@@ -708,8 +720,10 @@ dicts: ['basic_renewal_cycle','basic_renewal_unit','basic_overdue_rent','basic_p
 data(){
     return {
         judge:'',
+        ids:[],
         tableData:[],
         areaTree:[],
+        carTypeId:'',
         // 回显的数据
         areaData:[],
         // 车类下拉数据
@@ -744,7 +758,6 @@ methods:{
         let params = {}
         getBasicCarList(params).then(res => {
             this.tableData = res.rows
-
             }).catch(err => {
                 console.error('Error getting table list:', err);
             });
@@ -755,24 +768,26 @@ methods:{
        
     },
     //打开对话框
-    open(){
+   async open(){
         this.ruleForm={carTypeAuth: [],extendField:{}, }
         this.monthlyDisplay=false,
         this.storedDisplay=false,
+        await this.getCarType()
+        await this.getTreeselect()
+        await this.getParentTreeselect()
         this.dialogFormVisible = true
-        this.getCarType()
-        this.getTreeselect()
-        this.getParentTreeselect()
     },
     // 打开新增新增
-    addOpen(){
+   async addOpen(){
         this.judge = 'add'
-        this.open()
+     await this.open()
+        this.$refs.treeRef.setCheckedKeys(this.ids)
     },
     //获取车类类型
-    getCarType(){
-        getBasicType().then(res=>{
+ async getCarType(){
+     await getBasicType().then(res=>{
         if (res.data) {
+            console.log("还没到这里?");
         this.typeOption = res.data;
         }
         })
@@ -794,23 +809,40 @@ methods:{
 //区域
     async getParentTreeselect() {
       await getAreaTree().then((response) => {
-        console.log('response',response);
         this.areaTree=response.data
+        this.getIds(response.data)
       });
-      
 },
+//获取区域全部id数组
+getIds(data){
+    console.log(data);
+    data.forEach(item => {
+    // 添加当前对象的id到结果数组
+    if (item.id) {
+      this.ids.push(item.id);
+    }
+    // 如果当前对象有children属性且它是一个数组，则递归调用此函数
+    if (item.children && Array.isArray(item.children)) {
+        this.getIds(item.children);
+    }
+  });
+  console.log(this.ids);
+},
+
+
 //选中车类类型
 changeType(data){
-    console.log("车类改变");
+    console.log("车类改变",data);
     const DisplayType = {
         Monthly: 1,
         Stored: 2,
     };
     this.monthlyDisplay = data === DisplayType.Monthly || data === 4;;
     this.storedDisplay = data === DisplayType.Stored;
-    this.ruleForm.extendField = JSON.parse(this.typeOption[data-1].extendField)
-    console.log("车类初始",this.ruleForm.extendField );
-    this.ruleForm.extendField = this.objectValuesToStrings(this.ruleForm.extendField)
+    if(this.ruleForm.basicType !=="3"&&this.ruleForm.basicType !==3){
+        this.ruleForm.extendField = JSON.parse(this.typeOption[data-1].extendField)
+        this.ruleForm.extendField = this.objectValuesToStrings(this.ruleForm.extendField)
+        }
 },
     // 确认添加
   async addArea(){
@@ -829,9 +861,9 @@ changeType(data){
         this.ruleForm.extendField=JSON.stringify(this.ruleForm.extendField);
         let params=this.ruleForm
         console.log("添加参数",params);
-        // await addBasicCarType(params).then(res => {
-        //     console.log("添加成功",res);
-        // })
+        await addBasicCarType(params).then(res => {
+            console.log("添加成功",res);
+        })
         this.dialogFormVisible = false
         this.getList()
       } catch (error) {
@@ -862,7 +894,8 @@ changeType(data){
     //编辑
  async   editFun(data){
     this.judge='edit'
-    this.open()
+    this.carTypeId=data.id
+    await this.open()
       await getBasicCarData(data.id).then(res=>{
             this.ruleForm = { ...res.data };
             //处理回显的数据
@@ -877,9 +910,11 @@ changeType(data){
                 }
             });
               //判断一下车类
+              console.log("车类3",this.ruleForm.basicType);
             this.changeType(this.ruleForm.basicType)
-            console.log(this.ruleForm.basicType);
-            if(this.ruleForm.basicType=!"3"){
+
+            console.log("车类4",this.ruleForm.basicType);
+            if(this.ruleForm.basicType !=="3"&&this.ruleForm.basicType !==3){
                 this.ruleForm.extendField ={ ...JSON.parse(res.data.extendField)}
             }
             //区域数据回显
@@ -897,17 +932,18 @@ changeType(data){
         return false;
       }
       try {
-        if(this.ruleForm.basicType=!"3"){
+        if(this.ruleForm.basicType !=="3"&&this.ruleForm.basicType !==3){
+            console.log("进来了嘛1");
         this.ruleForm.carTypeAuth = this.ruleForm.carTypeAuth.join(',');
         this.ruleForm.extendField=JSON.stringify(this.ruleForm.extendField);
         }
         const checkedNodes = this.$refs.treeRef.getCheckedNodes();
-        this.ruleForm.basicCarTypeAreas=checkedNodes.map(node => ({ areaId: node.id }));
+        this.ruleForm.basicCarTypeAreas=checkedNodes.map(node => ({ areaId: node.id,carTypeId:this.carTypeId }));
         let params=this.ruleForm
         console.log("添加参数",params);
-        // await editBasicCarType(params).then(res => {
-        //     console.log("添加成功",res);
-        // })
+        await editBasicCarType(params).then(res => {
+            console.log("添加成功",res);
+        })
         this.dialogFormVisible = false
         this.getList()
       } catch (error) {

@@ -226,6 +226,7 @@ export default {
     /** 查询部门列表 */
     getList() {
       this.loading = true;
+      console.log("部门",this.queryParams);
       listDept(this.queryParams).then(response => {
         console.log('response',response);
         this.deptList = this.handleTree(response.data, "deptId");

@@ -1,22 +1,54 @@
 <template>
     <!-- 区域管理 -->
     <div class="app-container">
-        <div class="set">
+        <div >
             <!-- 添加区域 -->
-            <el-button type="success" class="addRegion"  @click="addOpen">添加区域</el-button>
+            <!-- <el-button type="success" class="addRegion"  @click="addOpen">添加区域</el-button> -->
             <!-- 提示框 -->
-            <el-tooltip placement="right">
-                <div slot="content">1.区域为子车场,默认车场为大车场,如为大车场内有指定区域单独计费则添加区域
-                    <br/>2.子区域需单独设置计费方式
-                    <br/>3.月卡车可单独设罟区域月卡
-                </div>
-                <svg-icon icon-class="prompt"/>
-            </el-tooltip>
+           
             <!-- 搜索 -->
-            <div class="serach">
+            <!-- <div class="serach">
                 <el-input v-model="serachForm.areaName" placeholder="请输区域名称进行搜索" class='serachinput'></el-input>
                 <el-button type="primary" @click="searchList">搜索</el-button>
-            </div>
+            </div> -->
+            <el-form :model="serachForm" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+                <el-form-item label="区域名称" prop="areaId">
+                    <el-input
+                    v-model="serachForm.areaName"
+                    placeholder="请输区域名称进行搜索"
+                    clearable
+                    />
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="searchList">搜索</el-button>
+                    <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+                </el-form-item>
+                </el-form>
+
+                <el-row :gutter="10" class="mb8">
+                <el-col :span="1.5">
+                    <el-button
+                    type="primary"
+                    plain
+                    icon="el-icon-plus"
+                    size="mini"
+                    @click="addOpen"
+                    v-hasPermi="['basic:basicBusyTime:add']"
+                    >新增</el-button>
+                    <el-tooltip placement="right">
+                            <div slot="content">1.区域为子车场,默认车场为大车场,如为大车场内有指定区域单独计费则添加区域
+                                <br/>2.子区域需单独设置计费方式
+                                <br/>3.月卡车可单独设罟区域月卡
+                            </div>
+                            <svg-icon icon-class="prompt"/>
+                        </el-tooltip>
+                </el-col>
+    
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row>
+
+
+
         </div>
         <!-- 列表 -->
         <el-table
@@ -107,6 +139,8 @@ components: { Treeselect },
 data(){
     return {
         judge:'',
+         // 显示搜索条件
+         showSearch: true,
         serachForm:{
             areaName:''
         },
@@ -122,7 +156,7 @@ data(){
             areaName: '',
             areaParking: '',
             areaRemainPraking: '',
-            parentId: undefined,
+            parentId: 0,
             deptId: undefined,
             areaCode: '',
         },
@@ -164,6 +198,10 @@ methods:{
     //查询
     searchList(){
         this.getList()
+    },
+    //重置
+    resetQuery(){
+
     },
     //新建
     addOpen(){

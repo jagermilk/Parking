@@ -1,12 +1,12 @@
 import request from '@/utils/request'
 
 // 获取列表
-export const getTableList = (data) => {
-  console.log(data);
+export const getTableList = (query) => {
+  console.log(query);
     return request({
       url: 'basic/basicArea/list',
       method: 'get',
-      data:data
+      params:query
     })
   }
 // 添加区域
