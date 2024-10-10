@@ -19,34 +19,40 @@ export default {
     }
   },
   computed: {
+    //1先保存vuex里面拿到的theme
     defaultTheme() {
       return this.$store.state.settings.theme
     }
   },
   watch: {
+    // 2.监听theme有没有改变,如果有改变,就赋值给这个组件里面的theme
     defaultTheme: {
       handler: function(val, oldVal) {
+        console.log('val',val);
         this.theme = val
       },
       immediate: true
     },
     async theme(val) {
+      //3. theme改变后调用函数setTheme
+      console.log('val2222',val);
       await this.setTheme(val)
     }
   },
   created() {
     if(this.defaultTheme !== ORIGINAL_THEME) {
+      //页面已展开,就调用函数setTheme,并传入theme的值
       this.setTheme(this.defaultTheme)
     }
   },
 
   methods: {
     async setTheme(val) {
+      // console.log('chalk',this.chalk);
       const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
-
       const getHandler = (variable, id) => {
         return () => {
           const originalCluster = this.getThemeCluster(ORIGINAL_THEME.replace('#', ''))
@@ -119,7 +125,6 @@ export default {
           red += Math.round(tint * (255 - red))
           green += Math.round(tint * (255 - green))
           blue += Math.round(tint * (255 - blue))
-
           red = red.toString(16)
           green = green.toString(16)
           blue = blue.toString(16)

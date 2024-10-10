@@ -1,5 +1,6 @@
 <template>
-  <div class="sidebar-logo-container" :class="{'collapse':collapse}" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
+  <!-- <div class="sidebar-logo-container" :class="{'collapse':collapse}" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }"> -->
+  <div class="sidebar-logo-container" :class="{'collapse':collapse}" >
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo" />
@@ -66,7 +67,7 @@ export default {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: #0076f6 !important;
+  background-color: var(--current-color); /* 使用变量设置背景颜色 */
   text-align: center;
   overflow: hidden;
 

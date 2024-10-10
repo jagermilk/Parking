@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div class="navbar" >
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!topNav"/>
@@ -116,7 +116,8 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #0076f6;
+  // background: theme;
+  background-color: var(--current-color); /* 使用变量设置背景颜色 */
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {

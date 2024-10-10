@@ -2,7 +2,7 @@
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
-        <div style="margin: 15px 0 0 15px; background-color: #fff;  height: 100%; border-radius: 16px; width: 98%; ;">
+        <div style="margin: 0 0 0 15px; background-color: #fff;  height: 100%; border-radius: 16px; width: 98%; ;">
           <router-view v-if="!$route.meta.link" :key="key" />
         </div>
       </keep-alive>
@@ -31,26 +31,11 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   /* 50= navbar  50  */
-  height: calc(100vh - 50px) !important;
+  height: 90% !important;
   width: 100%;
   position: relative;
   overflow: hidden;
   background-color: #f2f2f6 !important;
-}
-
-.fixed-header + .app-main {
-  padding-top: 50px;
-}
-
-.hasTagsView {
-  .app-main {
-    /* 84 = navbar + tags-view = 50 + 34 */
-    min-height: calc(100vh - 84px);
-  }
-
-  .fixed-header + .app-main {
-    padding-top: 84px;
-  }
 }
 </style>
 

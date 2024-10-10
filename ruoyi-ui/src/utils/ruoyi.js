@@ -125,13 +125,44 @@ export function sprintf(str) {
   });
   return flag ? str : '';
 }
+//将对象里面的所有属性的值都转化为字符串
+export function  numberValuesToStrings(obj) {
+  // 创建一个新的对象用来存放转换后的属性值
+  const newObj = {};
 
+  // 遍历原对象的所有属性
+  for (let key in obj) {
+    // 确保当前属性属于对象本身，防止遍历到原型链上的属性
+    if (obj.hasOwnProperty(key)) {
+      // 检查属性值是否为number类型
+      if (typeof obj[key] === 'number') {
+        // 将number类型的属性值转换为字符串
+        newObj[key] = obj[key].toString();
+      } else {
+        // 如果不是number类型，则直接复制原属性值
+        newObj[key] = obj[key];
+      }
+    }
+  }
+
+  return newObj;
+}
 // 转换字符串，undefined,null等转化为""
 export function parseStrEmpty(str) {
   if (!str || str == "undefined" || str == "null") {
     return "";
   }
   return str;
+}
+/**
+ * 将Number类型转换为String类型
+ * 
+ */
+export function numberToString(num) {
+  if (typeof num === 'number') {
+    return num.toString();
+  }
+  return 'Invalid input: not a number';
 }
 
 // 数据合并

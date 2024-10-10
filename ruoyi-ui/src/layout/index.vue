@@ -2,11 +2,16 @@
   <div :class="classObj" class="app-wrapper" :style="{'--current-color': theme}">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
     <sidebar v-if="!sidebar.hide" class="sidebar-container"/>
-    <div :class="{hasTagsView:needTagsView,sidebarHide:sidebar.hide}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
+    <!-- <div :class="{'hasTagsView':needTagsView,'sidebarHide':sidebar.hide}" class="main-container"> -->
+    <div class="main-container">
+      <div class="fixed-header">
+        <!-- 头部 -->
         <navbar :a='a'/>
-        <!-- <tags-view v-if="needTagsView"/> -->
+        <!-- 页面切换 -->
+        <tags-view v-if="needTagsView"/>
       </div>
+      <!-- <div style="height: 9%;">
+      </div> -->
       <app-main id='appmain'/>
       <right-panel>
         <settings/>
@@ -40,6 +45,7 @@ export default {
   },
   mounted(){
     this.qunpin()
+    console.log('them',this.theme);
   },
   computed: {
     ...mapState({
@@ -68,7 +74,6 @@ export default {
     },
     qunpin(){
       this.a=document.getElementById('appmain')
-     console.log('dom1',this.a);
      this.$store.commit('transmission/set_appmine',this.a)
      console.log('dom4',this.$store.state.transmission.appmine);
     }
@@ -105,12 +110,15 @@ export default {
   }
 
   .fixed-header {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 9;
-    width: calc(100% - 240px);
-    transition: width 0.28s;
+    
+    // position: fixed;
+    // top: 0;
+    // right: 0;
+    // z-index: 9;
+    // width: calc(100% - 240px);
+    width: 100% !important;
+    height: 9%;
+    // transition: width 0.28s;
   }
 
   .hideSidebar .fixed-header {

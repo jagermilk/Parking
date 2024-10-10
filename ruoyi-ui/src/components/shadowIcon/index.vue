@@ -45,12 +45,14 @@
     position: relative;
     height: 100%;
     transition: box-shadow 0.3s ease;
+  background-color: transparent;
+
   }
   
   .content {
     /* 你的内容样式 */
     height: 100%;
-    background-color: #fff;
+    /* background-color: #fff; */
    }
    
   .container:hover {
