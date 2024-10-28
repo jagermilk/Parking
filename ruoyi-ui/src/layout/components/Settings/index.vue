@@ -41,7 +41,7 @@
               <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" @change="themeChange" />
           </div>
         </div>
-     
+
       </div>
 
         <el-divider/>
@@ -62,7 +62,7 @@
           <span>固定 Header</span>
           <el-switch v-model="fixedHeader" class="drawer-switch" />
         </div> -->
-<!-- 
+<!--
         <div class="drawer-item">
           <span>显示 Logo</span>
           <el-switch v-model="sidebarLogo" class="drawer-switch" />
@@ -198,7 +198,6 @@ export default {
       );
       setTimeout(this.$modal.closeLoading(), 1000)
       const cachedSetting = this.$cache.local.get("layout-setting");
-      console.log('本地缓存',cachedSetting);
     },
     resetSetting() {
       this.$modal.loading("正在清除设置缓存并刷新，请稍候...");

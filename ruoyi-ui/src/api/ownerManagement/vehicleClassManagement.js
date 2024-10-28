@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 //获取车类型列表
-export const getBasicCarList = (data) => {
+export const getBasicCarList = (query) => {
     return request({
       url: '/basic/basicCarType/list',
       method: 'get',
-      data:data
+      params:query
     })
   }
   //基础类型数据

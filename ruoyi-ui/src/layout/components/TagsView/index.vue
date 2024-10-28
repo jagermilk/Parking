@@ -78,8 +78,8 @@ export default {
     activeStyle(tag) {
       if (!this.isActive(tag)) return {};
       return {
-        "background-color": this.theme,
-        "border-color": this.theme
+        "background-color": 'fff',
+        "border-color": '#dcdee2'
       };
     },
     isAffix(tag) {
@@ -243,19 +243,19 @@ export default {
   width: 100%;
   background: #f0f0f4;
 
- 
+
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;
       position: relative;
       cursor: pointer;
-      height: 26px;
-      line-height: 26px;
+      height: 32px;
+      line-height: 32px;
       border: 1px solid #d8dce5;
       color: #495060;
-      background: #fff;
+      background: #f8f8f9;
       padding: 0 8px;
-      font-size: 12px;
+      font-size: 14px;
       margin-left: 5px;
       margin-top: 4px;
       &:first-of-type {
@@ -265,12 +265,12 @@ export default {
         margin-right: 15px;
       }
       &.active {
-        background-color: #42b983;
-        color: #fff;
+        background-color: #fff;
+        color: #2d8cf0;
         border-color: #42b983;
         &::before {
           content: '';
-          background: #fff;
+          background: #2d8cf0;
           display: inline-block;
           width: 8px;
           height: 8px;

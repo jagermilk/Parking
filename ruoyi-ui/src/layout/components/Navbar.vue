@@ -93,7 +93,6 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      console.log('sidebar',this.sidebar);
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {

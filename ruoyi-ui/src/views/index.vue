@@ -14,53 +14,53 @@
               </div>
             </shadowIcon>
             <shadowIcon :idname="'two'">
-              <div class="tag" shadow="hover" id="two">     
+              <div class="tag" shadow="hover" id="two">
                 <div class="numName">在场车辆</div>
                 <div class="num">9999</div>
                 <div class="yesterdayData">昨日 <span>888</span></div>
               </div>
             </shadowIcon>
             <shadowIcon :idname="'three'">
-              <div class="tag" shadow="hover" id="three" >     
+              <div class="tag" shadow="hover" id="three" >
                 <div class="numName">在场车辆</div>
                 <div class="num">9999</div>
                 <div class="yesterdayData">昨日 <span>888</span></div>
               </div>
             </shadowIcon>
             <shadowIcon :idname="'four'">
-              <div class="tag" shadow="hover" id="four">     
+              <div class="tag" shadow="hover" id="four">
                 <div class="numName">在场车辆</div>
                 <div class="num">9999</div>
                 <div class="yesterdayData">昨日 <span>888</span></div>
               </div>
             </shadowIcon>
             <shadowIcon :idname="'five'" >
-              <div class="tag" shadow="hover" id="five">     
+              <div class="tag" shadow="hover" id="five">
                 <div class="numName">在场车辆</div>
                 <div class="num">9999</div>
                 <div class="yesterdayData">昨日 <span>888</span></div>
               </div>
             </shadowIcon>
             <shadowIcon :idname="'six'">
-              <div class="tag" shadow="hover" id="six">     
+              <div class="tag" shadow="hover" id="six">
                 <div class="numName">在场车辆</div>
                 <div class="num">9999</div>
                 <div class="yesterdayData">昨日 <span>888</span></div>
               </div>
             </shadowIcon>
           </div>
-        
+
       </el-col>
       <el-col :span="6">
         <div class="grid-content bg-purple">
             <el-card class="inMangement" >
               <div slot="header" class="clearfix">
-              <span >管理入口</span> 
-              </div> 
+              <span >管理入口</span>
+              </div>
               <el-row :gutter="10">
                 <el-col :span="12" v-for="(item, index) in items" :key="index">
                   <div class="icon-text-container">
-                      <i :class="'el-icon-' + item.icon"></i> 
+                      <i :class="'el-icon-' + item.icon"></i>
                     <span>{{ item.text }}</span>
                   </div>
                 </el-col>
@@ -72,9 +72,9 @@
       <el-col :span="6">
         <div class="grid-content bg-purple">
           <shadowIcon :idname="'seven'" >
-      
+
             <div slot="header" class="clearfix" >
-               <span>车道列表</span> 
+               <span>车道列表</span>
             </div>
             <el-table
               :data="tableData"
@@ -112,7 +112,7 @@
             <div
               class="onee"
               style="height: 90%; "
-            ></div>         
+            ></div>
           </div>
         </shadowIcon>
       </el-col>
@@ -259,7 +259,6 @@ export default {
         var myChart = echarts.init(chartDom);
         var option;
         window.addEventListener("resize", function () {
-          // console.log("变meimei",);
           myChart.resize();
         });
         option = {
@@ -309,7 +308,6 @@ export default {
     lineChart() {
       var chartDomAll = document.querySelectorAll(".twoo");
       chartDomAll.forEach(function (chartDom) {
-        console.log(chartDom);
         var myChart = echarts.init(chartDom);
         var option;
         window.addEventListener("resize", function () {
@@ -349,7 +347,6 @@ export default {
   watch: {
     Titler(newVal, oldVal) {
       // 这里监听carTitler的变化
-      console.log('carTitler changed from', oldVal, 'to', newVal);
     },
   },
 };
@@ -375,7 +372,7 @@ export default {
   background-repeat: no-repeat; /* 防止背景图片平铺 */
   background-size: cover; /* 图片缩放以填满容器 */
     background-position: center; /* 图片居中 */
-  
+
 }
 .el-row {
   height: 32%;
@@ -407,7 +404,7 @@ export default {
 .bg-purple {
   height: 100%;
   background: #fff;
- 
+
 }
 .bg-purple-light {
   background: #e5e9f2;
@@ -419,7 +416,7 @@ export default {
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
-  
+
 }
 // 第一个数据展示样式
 .one{
@@ -431,24 +428,24 @@ export default {
   background-color: transparent;
   .tag{
     background-color: #fff;
-    height: 100% !important; 
+    height: 100% !important;
     padding: 13px 15px 15px 15px;
     display: flex;
     flex-direction: column; /* 设置为垂直布局 */
     justify-content: space-around; /* 在主轴（这里是垂直方向）上均匀分配空间 */
     .numName{
-      font-size: 15px;  
+      font-size: 15px;
       font-family: GB;
       color: #62676b;
-      
+
     }
     .num{
       font-size: 26px;
       color: #3d9bff;
       text-align: center;
-    }  
+    }
     .yesterdayData{
-      font-size: 12px; 
+      font-size: 12px;
       color: #94999d;
     }
     }

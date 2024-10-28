@@ -45,9 +45,25 @@ export function delBasicCarOwner(id) {
 }
 // 查询车位列表
 export function getParkingSpaceList(data) {
+  console.log(9,data);
   return request({
     url: 'basic/basicParkingSpace/list',
     method: 'get',
+    params: data
+  })
+}
+//新增车位
+export function addParkingSpace(data) {
+  return request({
+    url: 'basic/basicParkingSpace',
+    method: 'post',
     data: data
+  })
+}
+//删除车位
+export function delParkingSpace(id) {
+  return request({
+    url: 'basic/basicParkingSpace/' + id,
+    method: 'delete'
   })
 }

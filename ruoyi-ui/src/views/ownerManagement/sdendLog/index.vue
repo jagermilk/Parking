@@ -3,13 +3,13 @@
         <!-- 车主管理 -->
         <div >
             <!-- 搜索 -->
-            <div >       
+            <div >
                 <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"  label-width="68px">
                 <el-form-item label="车类id" prop="carTypeId">
                     <el-input
                     v-model="queryParams.carTypeId"
                     placeholder="请输入车类id"
-                    clearable  
+                    clearable
                     />
                 </el-form-item>
                 <el-form-item label="车牌" prop="carNumber">
@@ -62,12 +62,12 @@
                     />
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" icon="el-icon-search" size="mini" @click="searchList">搜索</el-button> 
+                    <el-button type="primary" icon="el-icon-search" size="mini" @click="searchList">搜索</el-button>
                     <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
                 </el-form-item>
                 </el-form>
             </div>
-            
+
             <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
                 <el-button
@@ -85,7 +85,7 @@
                 plain
                 icon="el-icon-edit"
                 size="mini"
-      
+
                 >车主导入</el-button>
             </el-col>
             <el-col :span="1.5">
@@ -169,8 +169,8 @@
                 <el-form-item label="剩余车位" prop="areaRemainPraking">
                     <el-input v-model="ruleForm.areaRemainPraking"></el-input>
                 </el-form-item>
-              
-                
+
+
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <!-- <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -215,7 +215,7 @@ export default {
             dialogFormVisible:false,
             ruleForm:{
             },
-        } 
+        }
     },
     created(){
     this.getList()
@@ -228,12 +228,8 @@ export default {
         if (this.serachForm) {
             params = Object.assign({}, params, { ...this.serachForm });
         }
-        console.log("搜索",this.serachForm);
-        console.log('par',params);
         listBasicCarOwner(params).then(res => {
-                console.log('res',res)
                 this.tableData = this.handleTree(res.data);
-                console.log('this.tableData',this.tableData);
             }).catch(err => {
                 // console.error('Error getting table list:', err);
             });
@@ -241,7 +237,7 @@ export default {
     //查询
     searchList(){
         this.getList()
-       
+
     },
     //重置
     resetQuery(){
@@ -290,7 +286,7 @@ export default {
             width: 300px;
         }
     }
-    
+
 }
 .list{
     margin-top: 20px;

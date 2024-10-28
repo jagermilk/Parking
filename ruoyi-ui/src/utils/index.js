@@ -388,3 +388,22 @@ export function isNumberStr(str) {
   return /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g.test(str)
 }
 
+//平铺树形结构
+export function flattenTree(tree) {
+  const result = [];
+
+  function traverse(node) {
+      // 如果有子节点，递归遍历
+      if (node.children) {
+          node.children.forEach(child => {
+              // 将子节点添加到结果数组
+              result.push({ id: child.id, label: child.label });
+              // 继续遍历子节点
+              traverse(child);
+          });
+      }
+  }
+
+  tree.forEach(node => traverse(node));
+  return result;
+}

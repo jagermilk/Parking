@@ -35,26 +35,24 @@ export default {
       if(this.sonIscard){
         screenfull.request(this.$store.state.transmission.SmallCard)
         this.adjustFontSize(true);
-      }else{     
-        screenfull.request(this.$store.state.transmission.appmine) 
+      }else{
+        screenfull.request(this.$store.state.transmission.appmine)
         this.$store.commit('transmission/set_carTitler',true)
-        console.log(this.$store.state.transmission.carTitler);
       }
       if (screenfull.isFullscreen) {
         // screenfull.exit();
         this.resetFontSize();
-      } 
+      }
     },
     // 字体变大
     adjustFontSize(isFullscreen) {
-      console.log(this.$store.state.transmission.SmallCard.children.length);
       // this.$store.state.transmission.SmallCard.style.padding='115px'
-      let card = this.$store.state.transmission.SmallCard.children;  
+      let card = this.$store.state.transmission.SmallCard.children;
       for(let i = 0; i < card.length; i++){
         if(!card[i]) continue; // 检查元素存在性
-          
+
           let fontSize = '';
-          
+
           switch(card[i].className){
             case 'numName':
               fontSize = isFullscreen ? '60px' : '15px';
@@ -74,7 +72,7 @@ export default {
   //       if(card[i].className == 'numName'){
   //         card[i].style.fontSize = isFullscreen ? '60px' : '15px';
   //       }
-        
+
   //       if(card[i].className == 'num'){
   //         card[i].style.fontSize = isFullscreen ? '100px' : '26px';
   //       }
@@ -85,12 +83,12 @@ export default {
     },
     // 字体变小
     resetFontSize() {
-      let card = this.$store.state.transmission.SmallCard.children; 
+      let card = this.$store.state.transmission.SmallCard.children;
       for(let i = 0; i < card.length; i++){
         if(!card[i]) continue; // 检查元素存在性
-          
+
           let fontSize = '';
-          
+
           switch(card[i].className){
             case 'numName':
               fontSize =  '15px';
@@ -109,7 +107,7 @@ export default {
         // if(card[i].className == 'numName'){
         //   card[i].style.fontSize = '15px';
         // }
-        
+
         // if(card[i].className == 'num'){
         //   card[i].style.fontSize = '26px';
         // }
@@ -117,7 +115,7 @@ export default {
         //   card[i].style.fontSize =  '12px';
         // }
       }
-      
+
     },
     // 屏幕变化事件
     change() {

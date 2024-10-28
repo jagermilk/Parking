@@ -4,52 +4,73 @@
         <div >
             <!-- 添加区域 -->
             <!-- <el-button type="success" class="add"  @click="addOpen">新增</el-button> -->
-            <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-                <el-button
+            <el-row :gutter="10" class="mb8" >
+            <el-form :model="queryVehicleClassParams" ref="queryParkingSpaceForm" size="small" :inline="true" v-show="showSearch"  label-width="68px">
+              <el-form-item label="基础类型" prop="areaId">
+                <el-select v-model="queryVehicleClassParams.basicType" filterable placeholder="请选择基础类型"  @change="changeType" clearable>
+                                <el-option
+                                v-for="item in typeOption"
+                                :key="item.id"
+                                :label="item.typeName"
+                                :value="item.id">
+                                </el-option>
+                            </el-select>
+                </el-form-item>
+                <el-form-item label="车类名称" prop="carTypeName">
+                            <el-input v-model="queryVehicleClassParams.carTypeName" placeholder="请输入车类名称"></el-input>
+                        </el-form-item>
+                <el-form-item label="" prop="prakingNumber">
+                <el-button  @click="searchList" size="mini" type="primary">搜索</el-button>
+              </el-form-item>
+          </el-form>
+              <el-button
                 type="primary"
-                plain
                 icon="el-icon-plus"
                 size="mini"
                 @click="addOpen"
                 v-hasPermi="['basic:basicCarOwner:add']"
                 >新增</el-button>
-            </el-col>
+                <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
             </el-row>
         </div>
         <!-- 列表 -->
         <div class="list">
             <el-table
+            border
             :data="tableData"
             style="width: 100%"
            >
                 <el-table-column
                 prop="carTypeName"
+                v-if="columns[0].visible"
                 label="车类名称"
                 align="center"
                 >
                 </el-table-column>
                 <el-table-column
                 prop="basicTypeName"
+                v-if="columns[1].visible"
                 label="基础类型"
                 align="center"
                 >
-               
                 </el-table-column>
                 <el-table-column
                 prop="totalPrakingNum"
+                v-if="columns[2].visible"
                 label="总车位"
                 align="center"
                 >
                 </el-table-column>
                 <el-table-column
                 prop="remainPrakingNum"
+                v-if="columns[3].visible"
                 label="余位"
                 align="center"
                 >
                 </el-table-column>
                 <el-table-column
                 prop="overPrakingCharging"
+                v-if="columns[4].visible"
                 label="超车位数"
                 align="center"
                 >
@@ -58,17 +79,23 @@
                 prop="operate"
                 align="center"
                 label="操作">
-                
-                <template slot-scope="scope">
-                    <el-button @click="editFun(scope.row)" type="text" size="small">编辑</el-button>
-                    <el-button @click="deleteFun(scope.row)" type="text" size="small">删除</el-button>
-                </template>
 
+                <template slot-scope="scope">
+                    <el-button @click="editFun(scope.row)" type="success" class="small-btn" size="small">编辑</el-button>
+                    <el-button @click="deleteFun(scope.row)" type="danger" class="small-btn" size="small">删除</el-button>
+                </template>
                 </el-table-column>
         </el-table>
+        <pagination
+                  v-show="total>0"
+                  :total="total"
+                  :page.sync="queryVehicleClassParams.pageNum"
+                  :limit.sync="queryVehicleClassParams.pageSize"
+                  @pagination="getList"
+                />
         </div>
         <!-- 新增表单 -->
-        <el-dialog title="添加区域" :visible.sync="dialogFormVisible" width="60%">
+        <el-dialog title="新增编辑" :visible.sync="dialogFormVisible" custom-class="self-dialog" width="60%">
             <!-- 表单 -->
             <el-form ref="form" :rules="rules" :model="ruleForm" label-width="120px">
                 <el-row :gutter="20">
@@ -92,14 +119,14 @@
                 </el-row>
                 <!-- 车类权限 -->
                 <!-- <el-row :gutter="24"  v-if="!storedDisplay">   -->
-                <el-row :gutter="24"  >  
+                <el-row :gutter="24"  >
                 <el-form-item label="车类权限" prop="carTypeAuth">
                     <el-checkbox-group v-model="ruleForm.carTypeAuth">
                         <el-checkbox v-for="dict in dict.type.basic_car_auth_month" :label="dict.value"  :key="dict.value">{{dict.label}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 </el-row>
-            
+
                 <!-- 月卡车 -->
                 <div v-if="monthlyDisplay">
                 <el-row :gutter="24">
@@ -147,13 +174,13 @@
                                     </el-option>
                             </el-select>
                         </el-form-item>
-                    </el-col>   
+                    </el-col>
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="12" >
-                        <el-form-item label="车位占用" prop="parkingSpaceOccupancy" >                        
+                        <el-form-item label="车位占用" prop="parkingSpaceOccupancy" >
                             <template #label>
-                                <span>车位占用</span> 
+                                <span>车位占用</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">车位占用:指超出车位,例如1个车位,2个车牌,当第一辆进入后，第二辆进入时就是车位占用
                                         <br/>-----------------------
@@ -176,7 +203,7 @@
                                     </el-option>
                             </el-select>
                         </el-form-item>
-                    </el-col>  
+                    </el-col>
                     <el-col :span="12" >
                         <el-form-item label="占用指定计费" prop="occupancyAssignmentCharge">
                             <el-select
@@ -196,11 +223,11 @@
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="12" >
-                        <el-form-item label="过期" prop="expiredFreeEnter" >                        
+                        <el-form-item label="过期" prop="expiredFreeEnter" >
                             <el-input style="width: 50px;"  v-model="ruleForm.extendField.expiredFreeEnter"></el-input>
                             <span style="font-weight: 700;">天内免费进出</span>
                         </el-form-item>
-                    </el-col>  
+                    </el-col>
                     <el-col :span="12" >
                         <el-form-item label="自定义编号" prop="customCode">
                             <el-input   v-model="ruleForm.extendField.customCode" placeholder="请输入自定义编号"></el-input>
@@ -209,21 +236,21 @@
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="12" >
-                        <el-form-item label="语音提示" prop="voicePrompt" >                        
+                        <el-form-item label="语音提示" prop="voicePrompt" >
                             <span style="font-weight: 700;">月卡已经过期X天+</span>
                             <el-input style="width: 70%;"  v-model="ruleForm.extendField.voicePrompt" placeholder="自定义"></el-input>
                             <span style="color: #c8c7c7;">注:仅万能语音卡可以播放自定义语言</span>
                         </el-form-item>
-                    </el-col>  
+                    </el-col>
                 </el-row>
                <el-row :gutter="24">
                     <el-col :span="12" >
                         <el-form-item label="月卡临期提醒" prop="monthlyRentComingTips" >
                             <template #label>
-                                <span>月卡临期提醒</span> 
+                                <span>月卡临期提醒</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
-                                        车主绑定微信后,当月卡快过期时,会推送微信通知                           
+                                        车主绑定微信后,当月卡快过期时,会推送微信通知
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -236,7 +263,7 @@
                     <el-col :span="12" >
                         <el-form-item label="月卡续费" prop="monthlyCardRenewalFree" >
                             <template #label>
-                                <span>月卡续费</span> 
+                                <span>月卡续费</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
                                        <br> 月卡过期后续费策略
@@ -249,7 +276,7 @@
                                        <br>当天开始: 有效期为（2021-11-02 ~ 2021-12-01）
                                        <br>明天开始: 有效期为（2021-11-03 ~ 2021-12-02）
                                        <br>注意: 以上设置只针对过期月卡车
-                                       <br>注意: 未过期月卡车续费只能从上次结束时间开始续费                        
+                                       <br>注意: 未过期月卡车续费只能从上次结束时间开始续费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -271,10 +298,10 @@
                     <el-col :span="12" >
                         <el-form-item label="超时禁止续费" prop="overtimeProhibitRenew" >
                             <template #label>
-                                <span>超时禁止续费</span> 
+                                <span>超时禁止续费</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
-                                        超过几天不允许续费                         
+                                        超过几天不允许续费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -284,16 +311,16 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-          
+
                 </el-row>
                 <el-row :gutter="24">
                     <el-col :span="12" >
                         <el-form-item label="提前续费限制" prop="earlyRenewalRestrictions" >
                             <template #label>
-                                <span>提前续费限制</span> 
+                                <span>提前续费限制</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
-                                        默认不限制。比如填了20天，则只有距离过期20天内才能续费，不可提前续费                         
+                                        默认不限制。比如填了20天，则只有距离过期20天内才能续费，不可提前续费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -306,13 +333,13 @@
                     <el-col :span="12" >
                         <el-form-item label="车主申请月卡" prop="ownerApplication" >
                             <template #label>
-                                <span>车主申请月卡</span> 
+                                <span>车主申请月卡</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
                                        车主申请月卡
                                        <br>默认禁止
                                        <br>允许需审核: 车主扫码办理后，需要车场审核通过后才生效
-                                       <br>允许无需审核: 车主扫码办理后，直接生效                      
+                                       <br>允许无需审核: 车主扫码办理后，直接生效
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -336,11 +363,11 @@
                     <el-col :span="12" >
                         <el-form-item label="场内新增/续费" prop="fieldWithinInsert " >
                             <template #label>
-                                <span>场内新增/续费</span> 
+                                <span>场内新增/续费</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
                                         临停部分收费: 月卡办理时间点前的时间段收费,办理后时间段免费
-                                        <br>全部免费: 此次停车全部免费                         
+                                        <br>全部免费: 此次停车全部免费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -362,12 +389,12 @@
                     <el-col :span="12" >
                         <el-form-item label="场内删除" prop="fieldWithinDelete" >
                             <template #label>
-                                <span>场内删除</span> 
+                                <span>场内删除</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
                                        场内删除
                                        <br>月卡部分免费: 月卡删除时间点前的时间段免费,删除后时间段收费
-                                       <br>全部收费: 此次停车全部收费                      
+                                       <br>全部收费: 此次停车全部收费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -391,10 +418,10 @@
                     <el-col :span="12" >
                         <el-form-item label="变更后子订单" prop="alterAfterSuborder " >
                             <template #label>
-                                <span>变更后子订单</span> 
+                                <span>变更后子订单</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
-                                        月卡续费、变更,其历史在场子订单是否免费 1-不免费 2-免费（子区域订单免费 勾选）                      
+                                        月卡续费、变更,其历史在场子订单是否免费 1-不免费 2-免费（子区域订单免费 勾选）
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -423,11 +450,11 @@
                     <el-col :span="12" >
                         <el-form-item label="车主扫码续费" prop="ownerCodeRenew " >
                             <template #label>
-                                <span>车主扫码续费</span> 
+                                <span>车主扫码续费</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
                                         临停部分收费: 月卡办理时间点前的时间段收费,办理后时间段免费
-                                        <br>全部免费: 此次停车全部免费                         
+                                        <br>全部免费: 此次停车全部免费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -449,12 +476,12 @@
                     <el-col :span="12" >
                         <el-form-item label="修改有效时间" prop="updateEffectiveTime" >
                             <template #label>
-                                <span>修改有效时间</span> 
+                                <span>修改有效时间</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
                                        场内删除
                                        <br>月卡部分免费: 月卡删除时间点前的时间段免费,删除后时间段收费
-                                       <br>全部收费: 此次停车全部收费                      
+                                       <br>全部收费: 此次停车全部收费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -478,11 +505,11 @@
             <!-- 储值车 -->
             <div v-if="storedDisplay">
                     <!-- 车类权限 -->
-                <!-- <el-row :gutter="24">  
+                <!-- <el-row :gutter="24">
                     <el-form-item label="车类权限" prop="carTypeAuth">
                         <el-checkbox-group v-model="ruleForm.extendField.carTypeAuth">
                             <el-checkbox v-for="dict in dict.type.basic_car_auth_stored" :label="dict.label" :key="dict.value">{{dict.label}}</el-checkbox>
-                          
+
                         </el-checkbox-group>
                     </el-form-item>
                 </el-row> -->
@@ -513,25 +540,25 @@
                     <el-col :span="12" >
                         <el-form-item label="余额低于(元)" prop="extendField.balanceBelow " >
                             <template #label>
-                                <span>余额低于(元)</span> 
+                                <span>余额低于(元)</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
-                                        余额低于*元,按照临停收费                       
+                                        余额低于*元,按照临停收费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
                             </template>
                             <el-input v-model="ruleForm.extendField.balanceBelow" placeholder="请输入"></el-input>
-                           
+
                         </el-form-item>
                     </el-col>
                     <el-col :span="12" >
                         <el-form-item label="超时禁止续费" prop="extendField.overtimeProhibitRenew" >
                             <template #label>
-                                <span>超时禁止续费</span> 
+                                <span>超时禁止续费</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
-                                        超过几天不允许续费                         
+                                        超过几天不允许续费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -542,7 +569,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                
+
             </div>
                 <!-- 共有的 -->
                 <div>
@@ -557,11 +584,11 @@
                     <el-col :span="12" >
                         <el-form-item label="入场确认" prop="inConfirm" >
                             <template #label>
-                                <span>入场确认</span> 
+                                <span>入场确认</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
                                         岗亭确认：岗亭确定后才放行
-                                        <br>预付入场：先车牌预付后再入场,此功能开启需与技术支持沟通                         
+                                        <br>预付入场：先车牌预付后再入场,此功能开启需与技术支持沟通
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -597,11 +624,11 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-             
+
                 <el-row :gutter="24">
                     <el-col :span="12" >
                         <el-form-item label="禁止重复入场" prop="inProhibitRepeat" >
-                            
+
                             <el-select
                                 v-model="ruleForm.inProhibitRepeat"
                                 filterable
@@ -618,7 +645,7 @@
                     </el-col>
                     <el-col :span="12" >
                         <el-form-item label="车位满时" prop="parkingFullTime" >
-                            
+
                             <el-select
                                 v-model="ruleForm.parkingFullTime"
                                 filterable
@@ -638,10 +665,10 @@
                     <el-col :span="8" >
                         <el-form-item label="总车位" prop="totalPrakingNum" >
                             <template #label>
-                                <span>总车位</span> 
+                                <span>总车位</span>
                                 <el-tooltip placement="bottom">
                                     <div slot="content">
-                                        车类自有余位,超出车位后可能收费                       
+                                        车类自有余位,超出车位后可能收费
                                     </div>
                                     <svg-icon icon-class="prompt"/>
                                 </el-tooltip>
@@ -691,13 +718,11 @@
                     </el-col>
                 </el-row>
             </div>
-
-
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addArea" v-if="judge==='add'">确 定</el-button>
-                <el-button type="primary" @click="editArea" v-if="judge==='edit'">确 定</el-button>
+                <el-button @click="dialogFormVisible = false" class="btn-dashed">取消</el-button>
+                <el-button type="primary" @click="addArea" v-if="judge==='add'">保存</el-button>
+                <el-button type="primary" @click="editArea" v-if="judge==='edit'">保存</el-button>
             </span>
         </el-dialog>
 
@@ -724,6 +749,15 @@ data(){
         tableData:[],
         areaTree:[],
         carTypeId:'',
+        showSearch:true,
+        // 列信息
+        columns: [
+          { key: 0, label: `车类名称`, visible: true },
+          { key: 1, label: `基础类型`, visible: true },
+          { key: 2, label: `总车位`, visible: true },
+          { key: 3, label: `余位`, visible: true },
+          { key: 4, label: `超车位数`, visible: true }
+        ],
         // 回显的数据
         areaData:[],
         // 车类下拉数据
@@ -735,8 +769,15 @@ data(){
             carTypeAuth: [],
             extendField:{}
         },
-        
-        
+        //车类参数
+        queryVehicleClassParams: {
+            pageNum: 1,
+            pageSize: 10,
+            basicType:null,
+            carTypeName:null
+        },
+        //车类总数
+        total:0,
         rules: {
         //     'extendField.overtimeProhibitRenew': [
         //     { required: false, message: '请输入区域名称', trigger: 'blur' },
@@ -750,14 +791,15 @@ data(){
 },
 created(){
     this.getList()
+    this.getCarType()
 },
 
 methods:{
     // 获取列表
     getList(){
-        let params = {}
-        getBasicCarList(params).then(res => {
+        getBasicCarList(this.queryVehicleClassParams).then(res => {
             this.tableData = res.rows
+            this.total = res.total
             }).catch(err => {
                 console.error('Error getting table list:', err);
             });
@@ -765,14 +807,13 @@ methods:{
     //查询
     searchList(){
         this.getList()
-       
+
     },
     //打开对话框
    async open(){
         this.ruleForm={carTypeAuth: [],extendField:{}, }
         this.monthlyDisplay=false,
         this.storedDisplay=false,
-        await this.getCarType()
         await this.getTreeselect()
         await this.getParentTreeselect()
         this.dialogFormVisible = true
@@ -787,12 +828,11 @@ methods:{
  async getCarType(){
      await getBasicType().then(res=>{
         if (res.data) {
-            console.log("还没到这里?");
         this.typeOption = res.data;
         }
         })
     },
-    
+
     objectValuesToStrings(obj) {
         // 创建一个新的对象用来存放转换后的属性值
         const newObj = {};
@@ -815,7 +855,6 @@ methods:{
 },
 //获取区域全部id数组
 getIds(data){
-    console.log(data);
     data.forEach(item => {
     // 添加当前对象的id到结果数组
     if (item.id) {
@@ -826,13 +865,11 @@ getIds(data){
         this.getIds(item.children);
     }
   });
-  console.log(this.ids);
 },
 
 
 //选中车类类型
 changeType(data){
-    console.log("车类改变",data);
     const DisplayType = {
         Monthly: 1,
         Stored: 2,
@@ -848,7 +885,6 @@ changeType(data){
   async addArea(){
         const valid = await this.$refs.form.validate()
       if (!valid) {
-        console.log('error submit!!');
         return false;
       }
       try {
@@ -856,13 +892,11 @@ changeType(data){
         const checkedNodes = this.$refs.treeRef.getCheckedNodes();
         this.ruleForm.basicCarTypeAreas=checkedNodes.map(node => ({ areaId: node.id }));
         // 将车道权限数组转换为逗号分隔的字符串
-        this.ruleForm.carTypeAuth = this.ruleForm.carTypeAuth.join(',');
+        this.ruleForm.carTypeAuth = this.ruleForm.carTypeAuth.join(',')
         // 将扩展字段转换为JSON字符串
         this.ruleForm.extendField=JSON.stringify(this.ruleForm.extendField);
         let params=this.ruleForm
-        console.log("添加参数",params);
         await addBasicCarType(params).then(res => {
-            console.log("添加成功",res);
         })
         this.dialogFormVisible = false
         this.getList()
@@ -900,8 +934,7 @@ changeType(data){
             this.ruleForm = { ...res.data };
             //处理回显的数据
             if(res.data.carTypeAuth){
-                console.log('zhe');
-                this.ruleForm.carTypeAuth = res.data.carTypeAuth.split(',');
+                this.ruleForm.carTypeAuth = res.data.carTypeAuth.split(',')
             }
             const propertiesToConvert = ['outNoOrder', 'inConfirm', 'inProhibitRepeat', 'overPrakingCharging','parkingFullTime',"remainBroadcastFlag"];
             propertiesToConvert.forEach(property => {
@@ -910,39 +943,31 @@ changeType(data){
                 }
             });
               //判断一下车类
-              console.log("车类3",this.ruleForm.basicType);
             this.changeType(this.ruleForm.basicType)
-
-            console.log("车类4",this.ruleForm.basicType);
             if(this.ruleForm.basicType !=="3"&&this.ruleForm.basicType !==3){
                 this.ruleForm.extendField ={ ...JSON.parse(res.data.extendField)}
             }
             //区域数据回显
             this.areaData=this.ruleForm.basicCarTypeAreas.map(node => (node.areaId ));
-            console.log('this.areaData',this.areaData);
             this.$refs.treeRef.setCheckedKeys(this.areaData)
         })
-        
+
     },
       //编辑保存
      async editArea(){
         const valid = await this.$refs.form.validate()
       if (!valid) {
-        console.log('error submit!!');
         return false;
       }
       try {
         if(this.ruleForm.basicType !=="3"&&this.ruleForm.basicType !==3){
-            console.log("进来了嘛1");
         this.ruleForm.carTypeAuth = this.ruleForm.carTypeAuth.join(',');
         this.ruleForm.extendField=JSON.stringify(this.ruleForm.extendField);
         }
         const checkedNodes = this.$refs.treeRef.getCheckedNodes();
         this.ruleForm.basicCarTypeAreas=checkedNodes.map(node => ({ areaId: node.id,carTypeId:this.carTypeId }));
         let params=this.ruleForm
-        console.log("添加参数",params);
         await editBasicCarType(params).then(res => {
-            console.log("添加成功",res);
         })
         this.dialogFormVisible = false
         this.getList()

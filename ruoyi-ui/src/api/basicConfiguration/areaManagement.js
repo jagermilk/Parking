@@ -2,7 +2,6 @@ import request from '@/utils/request'
 
 // 获取列表
 export const getTableList = (query) => {
-  console.log(query);
     return request({
       url: 'basic/basicArea/list',
       method: 'get',

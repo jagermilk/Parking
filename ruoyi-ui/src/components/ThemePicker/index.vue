@@ -28,14 +28,12 @@ export default {
     // 2.监听theme有没有改变,如果有改变,就赋值给这个组件里面的theme
     defaultTheme: {
       handler: function(val, oldVal) {
-        console.log('val',val);
         this.theme = val
       },
       immediate: true
     },
     async theme(val) {
       //3. theme改变后调用函数setTheme
-      console.log('val2222',val);
       await this.setTheme(val)
     }
   },
@@ -48,7 +46,6 @@ export default {
 
   methods: {
     async setTheme(val) {
-      // console.log('chalk',this.chalk);
       const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))

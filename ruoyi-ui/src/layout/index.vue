@@ -45,7 +45,6 @@ export default {
   },
   mounted(){
     this.qunpin()
-    console.log('them',this.theme);
   },
   computed: {
     ...mapState({
@@ -75,7 +74,6 @@ export default {
     qunpin(){
       this.a=document.getElementById('appmain')
      this.$store.commit('transmission/set_appmine',this.a)
-     console.log('dom4',this.$store.state.transmission.appmine);
     }
   }
 }
@@ -110,14 +108,14 @@ export default {
   }
 
   .fixed-header {
-    
+
     // position: fixed;
     // top: 0;
     // right: 0;
     // z-index: 9;
     // width: calc(100% - 240px);
     width: 100% !important;
-    height: 9%;
+    height: auto;
     // transition: width 0.28s;
   }
 
